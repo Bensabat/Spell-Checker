@@ -1,0 +1,4 @@
+#! /bin/sh
+
+# Create required directories
+mkdir -p out/ bin/release bin/debug
