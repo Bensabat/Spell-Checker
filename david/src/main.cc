@@ -74,22 +74,18 @@ int main(int argc, char** argv)
 
             std::string word;
             int freq;
-            int i = 0;
 
             // Creating the root of the trie
             Node *root = new Node();
 
             // Filling the trie with word and freq from file given
-            while (infile >> word >> freq && i < 15)
+            while (infile >> word >> freq)
             {
                 root->add_word(word + "$", freq);
-                i++;
             }
 
-            root->pretty_printer(root);
             auto results_vect = search_approx(root, "davis", 2);
             print_node_vect(results_vect);
-
         }
 
         return 0;
