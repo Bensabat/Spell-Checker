@@ -1,22 +1,11 @@
-MKDIR := mkdir -p
-RM := rm -rf
+CXX      = g++
+CXXFLAGS = -Wextra -Wall -pedantic -std=c++14
 
-all: ./out/Makefile
-	@ $(MAKE) -C out
+SRC  = david/src/main.cc david/src/node.cc david/src/damereau-levenshtein.cc
+EXEC = TextMiningCompiler
 
-./out/Makefile:
-	@ ($(MKDIR) out > /dev/null)
-	@ (cd out > /dev/null 2>&1 && cmake ..)
+all:
+	$(CXX) $(CXXFLAGS) $(SRC) -o $(EXEC)
 
-distclean:
-	@ ($(MKDIR) out > /dev/null)
-	@ (cd out > /dev/null 2>&1 && cmake .. > /dev/null 2>&1)
-	@- $(MAKE) --silent -C out clean || true
-	@- $(RM) ./out/Makefile
-	@- $(RM) ./out/src
-	@- $(RM) ./out/test
-	@- $(RM) ./out/CMake*
-	@- $(RM) ./out/cmake.*
-	@- $(RM) ./out/*.cmake
-	@- $(RM) ./out/*.txt
-	@- find . -name '.DS_Store' -type f -delete
+rm:
+	rm $(EXEC) $(EXEC2)
