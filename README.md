@@ -18,14 +18,6 @@ $ bash configure
 # It should create /out and /bin directories
 ```
 
-# Launch (david production)
-
-Execute the following command:
-```bash
-$ make
-$ ./TextMiningCompiler words_perso.txt dict.bin
-```
-
 # Launch (production)
 
 Execute the following command:
