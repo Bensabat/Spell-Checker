@@ -55,15 +55,18 @@ void print_node_vect(std::vector<std::tuple<std::string, size_t>> results_vect)
     {
         std::cout << "(" << std::get<0>(tuple) << ", " << std::get<1>(tuple) << ")" << std::endl;
     }
+    std::cout << "\nThis vector contained " << results_vect.size() << " words!\n" << std::endl;    
 }
 
 int main(int argc, char** argv)
 {
+
     if (argc != 3)
     {
         std::cerr << "Please enter ./TextMiningCompiler /path/to/words.txt /path/to/dict.bin" << std::endl;
         return 1;
     }
+    // 
     else
     {
         std::ifstream infile(argv[1]);
@@ -84,7 +87,10 @@ int main(int argc, char** argv)
                 root->add_word(word + "$", freq);
             }
 
-            auto results_vect = search_approx(root, "davis", 2);
+            std::string pipe_approx, pipe_dist_max, pipe_word;
+            std::cin >> pipe_approx >> pipe_dist_max >> pipe_word;
+
+            auto results_vect = search_approx(root, pipe_word, atoi(pipe_dist_max.c_str()));
             print_node_vect(results_vect);
         }
 

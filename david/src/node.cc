@@ -59,8 +59,8 @@ ssize_t index_child(std::vector<Node *> children, std::string data)
 void Node::add_word(std::string word, size_t freq)
 {
     Node *tmp_node = this;
-    uint8_t index_char = 0;
-    uint8_t flag_freq = 0;
+    size_t index_char = 0;
+    size_t flag_freq = 0;
 
     while (index_char < word.length())
     {

@@ -1,0 +1,9 @@
+david   115236
+dad 2
+dav 33
+dadou   45
+davidou 51
+foo 6
+bar 7
+dd  81
+doudou  96
