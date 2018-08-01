@@ -1,0 +1,1 @@
+add_library (third_party INTERFACE)
