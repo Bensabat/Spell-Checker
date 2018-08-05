@@ -4,9 +4,9 @@
 #include <vector>
 #include <tuple>
 
-#include "algorithm/patricia_trie.hh"
-#include "algorithm/distance.hh"
-#include "algorithm/node.hh"
+#include "../algorithm/patricia_trie.hh"
+#include "../algorithm/distance.hh"
+#include "../algorithm/node.hh"
 
 using namespace std;
 
@@ -19,7 +19,7 @@ void search_approx_rec(Node *trie, std::string word, size_t max_dist,
     
     for (auto child : trie->children_get())
     {
-        if (child->data_get() == "$") // leaf
+        if (child->data_get() == '$') // leaf
         {
             dist = distance(word, acc);
 
@@ -91,11 +91,13 @@ int main(int argc, char** argv)
             root->add_word(word + "$", freq);
         }
 
-	string pipe_approx, pipe_dist_max, pipe_word;
-	cin >> pipe_approx >> pipe_dist_max >> pipe_word;
+        //root->pretty_printer(root);
 
-	auto results_vect = search_approx(root, pipe_word, atoi(pipe_dist_max.c_str()));
-	print_node_vect(results_vect);
+        string pipe_approx, pipe_dist_max, pipe_word;
+        
+        cin >> pipe_approx >> pipe_dist_max >> pipe_word;
+        auto results_vect = search_approx(root, pipe_word, atoi(pipe_dist_max.c_str()));
+        print_node_vect(results_vect);
     }
 
     return 0;

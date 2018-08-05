@@ -4,6 +4,7 @@
 #include <string>
 #include <vector>
 #include <sstream>
+#include <string.h>
 
 using namespace std;
 
@@ -11,7 +12,7 @@ class Node
 {
     public:
         Node();
-        Node(string data, size_t freq);
+        Node(char data, size_t freq);
 
         void pretty_printer(Node *node, size_t space = 0);
         void print() const;
@@ -22,10 +23,10 @@ class Node
 
         vector<Node *> children_get() const;
         size_t freq_get() const;
-        string data_get() const;
+        char data_get() const;
 
     private:
         vector<Node *> children_;
         size_t freq_;
-        string data_;
+        char data_;
 };

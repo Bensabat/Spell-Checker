@@ -2,11 +2,12 @@
 
 Node::Node()
 {
-    data_ = "";
+    char c = ' ';
+    data_ = c;
     freq_ = 0;
 }
 
-Node::Node(string data, size_t freq)
+Node::Node(char data, size_t freq)
 {
     freq_ = freq;
     data_ = data;
@@ -45,16 +46,18 @@ void Node::add_child(Node *child)
     children_.push_back(child);
 }
 
-ssize_t index_child(vector<Node *> children, string data)
+ssize_t index_child(vector<Node *> children, char data)
 {
     ssize_t index = 0;
     for (auto node : children)
     {
         if (node->data_get() == data)
+        {
             return index;
-        
+        }
+
         index++;
-    }
+    }  
     return -1;
 }
 
@@ -69,9 +72,9 @@ void Node::add_word(string word, size_t freq)
         if (index_char == word.length() - 1)
             flag_freq = freq;
 
-        string cur_char(1, word[index_char]);
+        char cur_char = word[index_char];
 
-
+        // Has not children
         if (tmp_node->children_get().size() == 0)
         {
             Node *n = new Node(cur_char, flag_freq);
@@ -81,8 +84,8 @@ void Node::add_word(string word, size_t freq)
         else // children_.size() >= 1
         {
             ssize_t index = index_child(tmp_node->children_, cur_char);
-            
-            if (index == -1)
+
+            if (index == -1) // node not found
             {
                 Node *n = new Node(cur_char, flag_freq);
                 tmp_node->add_child(n);
@@ -108,7 +111,7 @@ size_t Node::freq_get() const
     return freq_;
 }
 
-string Node::data_get() const
+char Node::data_get() const
 {
     return data_;
 }

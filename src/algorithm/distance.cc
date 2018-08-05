@@ -19,11 +19,9 @@ size_t distance(string word1, string word2)
         {
             dist = !(word1[i - 1] == word2[j - 1]);
 
-            d[i][j] = min({
-                d[i - 1][j] + 1, // deletion
-                d[i][j - 1] + 1, // insertion
-                d[i - 1][j - 1] + dist // substitution or equal
-            });
+            d[i][j] = min(min(d[i - 1][j] + 1,     // deletion
+                          d[i][j - 1] + 1),        // insertion
+                          d[i - 1][j - 1] + dist); // substitution or equal
 
             if (i > 1 && j > 1 && word1[i - 1] == word2[j - 2] && word1[i - 2] == word2[j - 1])
                 d[i][j] = min(d[i][j], d[i - 2][j - 2] + dist); // transposition
