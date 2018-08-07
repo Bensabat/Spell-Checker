@@ -8,25 +8,25 @@
 
 using namespace std;
 
-class Node
+class Trie
 {
     public:
-        Node();
-        Node(char data, size_t freq);
+        Trie();
+        Trie(char data, size_t freq);
 
-        void pretty_printer(Node *node, size_t space = 0);
+        void pretty_printer(Trie *trie, size_t space = 0);
         void print() const;
         void print_children() const;
 
-        void add_child(Node *child);
+        void add_child(Trie *child);
         void add_word(string, size_t);
 
-        vector<Node *> children_get() const;
+        vector<Trie *> children_get() const;
         size_t freq_get() const;
         char data_get() const;
 
     private:
-        vector<Node *> children_;
+        vector<Trie *> children_;
         size_t freq_;
         char data_;
 };

@@ -6,66 +6,34 @@
 
 #include "../algorithm/patricia_trie.hh"
 #include "../algorithm/distance.hh"
-#include "../algorithm/node.hh"
+#include "../algorithm/trie.hh"
 
 using namespace std;
 
-void search_approx_rec(Node *trie, std::string word, size_t max_dist,
-                       std::vector<std::tuple<std::string, size_t>> &results_nodes,
-                       std::string acc, size_t dist)
+void print_node_vect(vector<tuple<string, size_t>> results_vect)
 {
-    if (word.size() + max_dist < acc.size())
-        return;
-    
-    for (auto child : trie->children_get())
-    {
-        if (child->data_get() == '$') // leaf
-        {
-            dist = distance(word, acc);
-
-            if (dist <= max_dist)
-            {
-                auto cur_tuple = std::make_tuple(acc, child->freq_get());    
-                results_nodes.push_back(cur_tuple);
-
-                if (max_dist == 1)
-                    return;
-            }
-        }
-
-        // If child have some children, launch the search on them
-        else
-        {
-            search_approx_rec(child, word, max_dist, results_nodes, acc + child->data_get(), dist);
-        }
-    }
-    
-}
-
-std::vector<std::tuple<std::string, size_t>> search_approx(Node *trie, std::string word, size_t max_dist)
-{
-    std::vector<std::tuple<std::string, size_t>> results_nodes;
-    search_approx_rec(trie, word, max_dist, results_nodes, "", 0);
-
-    return results_nodes;
-}
-
-void print_node_vect(std::vector<std::tuple<std::string, size_t>> results_vect)
-{
-    std::cout << "This vector contained " << results_vect.size() << " words:\n" << std::endl;
+    cout << "This vector contained " << results_vect.size() << " words:\n" << endl;
     for(auto tuple : results_vect)
     {
-        std::cout << "(" << std::get<0>(tuple) << ", " << std::get<1>(tuple) << ")" << std::endl;
+        cout << "(" << get<0>(tuple) << ", " << get<1>(tuple) << ")" << endl;
     }
-    std::cout << "\nThis vector contained " << results_vect.size() << " words!\n" << std::endl;
+    cout << "\nThis vector contained " << results_vect.size() << " words!\n" << endl;
 }
 
 int main(int argc, char** argv)
 {
-    // PatriciaTrie* trie = new PatriciaTrie();
-    // trie->setValue(21);
+    // Test du common_prefix
+    if (argc == 1)
+    {
+        string pipe_word1, pipe_word2;
+        cin >> pipe_word1 >> pipe_word2;
 
-    // cout << "Compiler ... " << trie->getValue() << endl;
+        auto tuple_dec = common_prefix_decomposition(pipe_word1, pipe_word2);
+
+        cout << "[" << get<0>(tuple_dec) << ", " << get<1>(tuple_dec) << ", " << get<2>(tuple_dec) << "]" << endl;
+
+        return 0;
+    }
 
     if (argc != 3)
     {
@@ -73,31 +41,36 @@ int main(int argc, char** argv)
         return 1;
     }
 
-    std::ifstream infile(argv[1]);
-
+    ifstream infile(argv[1]);
     if (infile.is_open())
     {
-        std::cout << "Opened" << std::endl;
+        cout << "Opened" << endl;
 
-        std::string word;
+        string word;
         int freq;
 
-        // Creating the root of the trie
-        Node *root = new Node();
+        // Creating the root of the trie (or patricia)
+        //Trie *root = new Trie();
+        Patricia_trie *root = new Patricia_trie();        
 
         // Filling the trie with word and freq from file given
         while (infile >> word >> freq)
         {
-            root->add_word(word + "$", freq);
+            root->add_word(root, word + "$", freq);
         }
 
-        //root->pretty_printer(root);
+        cout << "END | size of child: " << root->children_get().size() << endl;
+        root->pretty_printer(root);
 
+        // Getting "approx dist word" by pipe
         string pipe_approx, pipe_dist_max, pipe_word;
-        
         cin >> pipe_approx >> pipe_dist_max >> pipe_word;
-        auto results_vect = search_approx(root, pipe_word, atoi(pipe_dist_max.c_str()));
-        print_node_vect(results_vect);
+
+        // Launch the search
+        //auto results_vect = search_trie_approx(root, pipe_word, atoi(pipe_dist_max.c_str()));
+        
+        // Print the results
+        //print_node_vect(results_vect);
     }
 
     return 0;

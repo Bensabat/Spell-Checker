@@ -1,21 +1,21 @@
-#include "node.hh"
+#include "trie.hh"
 
-Node::Node()
+Trie::Trie()
 {
     char c = ' ';
     data_ = c;
     freq_ = 0;
 }
 
-Node::Node(char data, size_t freq)
+Trie::Trie(char data, size_t freq)
 {
     freq_ = freq;
     data_ = data;
 }
 
-void Node::pretty_printer(Node *node, size_t space)
+void Trie::pretty_printer(Trie *trie, size_t space)
 {
-    for (auto child : node->children_get())
+    for (auto child : trie->children_get())
     {
         for (size_t i = 0; i <= space; i++)
             cout << "+";
@@ -27,12 +27,12 @@ void Node::pretty_printer(Node *node, size_t space)
     }
 }
 
-void Node::print() const
+void Trie::print() const
 {
     cout << "Data: " << data_ << ", freq: " << freq_ << endl;
 }
 
-void Node::print_children() const
+void Trie::print_children() const
 {
     this->print();
     cout << "This current node has " << children_.size() << " children.\n" << endl;
@@ -41,17 +41,17 @@ void Node::print_children() const
         child->print();
 }
 
-void Node::add_child(Node *child)
+void Trie::add_child(Trie *child)
 {
     children_.push_back(child);
 }
 
-ssize_t index_child(vector<Node *> children, char data)
+ssize_t index_child(vector<Trie *> children, char data)
 {
     ssize_t index = 0;
-    for (auto node : children)
+    for (auto trie : children)
     {
-        if (node->data_get() == data)
+        if (trie->data_get() == data)
         {
             return index;
         }
@@ -61,9 +61,9 @@ ssize_t index_child(vector<Node *> children, char data)
     return -1;
 }
 
-void Node::add_word(string word, size_t freq)
+void Trie::add_word(string word, size_t freq)
 {
-    Node *tmp_node = this;
+    Trie *tmp_trie = this;
     size_t index_char = 0;
     size_t flag_freq = 0;
 
@@ -75,25 +75,25 @@ void Node::add_word(string word, size_t freq)
         char cur_char = word[index_char];
 
         // Has not children
-        if (tmp_node->children_get().size() == 0)
+        if (tmp_trie->children_get().size() == 0)
         {
-            Node *n = new Node(cur_char, flag_freq);
-            tmp_node->add_child(n);
-            tmp_node = tmp_node->children_get()[0];
+            Trie *n = new Trie(cur_char, flag_freq);
+            tmp_trie->add_child(n);
+            tmp_trie = tmp_trie->children_get()[0];
         }
         else // children_.size() >= 1
         {
-            ssize_t index = index_child(tmp_node->children_, cur_char);
+            ssize_t index = index_child(tmp_trie->children_, cur_char);
 
             if (index == -1) // node not found
             {
-                Node *n = new Node(cur_char, flag_freq);
-                tmp_node->add_child(n);
-                tmp_node = tmp_node->children_[tmp_node->children_.size() - 1];
+                Trie *n = new Trie(cur_char, flag_freq);
+                tmp_trie->add_child(n);
+                tmp_trie = tmp_trie->children_[tmp_trie->children_.size() - 1];
             }
             else // node found
             {
-                tmp_node = tmp_node->children_[index];
+                tmp_trie = tmp_trie->children_[index];
             }
         }
 
@@ -101,17 +101,17 @@ void Node::add_word(string word, size_t freq)
     }
 }
 
-vector<Node *> Node::children_get() const
+vector<Trie *> Trie::children_get() const
 {
     return children_;
 }
 
-size_t Node::freq_get() const
+size_t Trie::freq_get() const
 {
     return freq_;
 }
 
-char Node::data_get() const
+char Trie::data_get() const
 {
     return data_;
 }
