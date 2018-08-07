@@ -6,7 +6,7 @@
 #include <sstream>
 #include <string.h>
 
-#include "./distance.hh"
+#include "./utils.hh"
 
 using namespace std;
 

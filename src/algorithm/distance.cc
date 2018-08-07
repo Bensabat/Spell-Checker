@@ -1,5 +1,7 @@
 #include "distance.hh"
 
+
+// Function that calculate the Damerau-Levenshtein distance between 2 words
 size_t distance(string word1, string word2)
 {
     size_t i, j, dist;
@@ -30,6 +32,42 @@ size_t distance(string word1, string word2)
     return d[length1][length2];
 }
 
+// Function that add tuple into vecto by ASC distance, DSC frequence, ASC lexical order
+void add_tuple_result(vector<tuple<string, size_t, size_t>> &results_nodes, tuple<string, size_t, size_t> &cur_tuple)
+{
+    vector<tuple<string, size_t, size_t>>::iterator it = results_nodes.begin();
+    
+    // Search pos bound for dist
+    size_t index_dist_max = 0;
+    size_t index_dist_min = 0;
+    
+    for(; index_dist_max < results_nodes.size(); index_dist_max++)
+    {
+        if (get<2>(cur_tuple) < get<2>(results_nodes[index_dist_max]))
+        {
+            break;
+        }
+        if (get<2>(cur_tuple) > get<2>(results_nodes[index_dist_max]))
+        {
+            index_dist_min++;
+        }
+    }
+    
+    // Search pos for freq
+    size_t index_freq = index_dist_min;
+    for(; index_freq < index_dist_max; index_freq++)
+    {
+        if (get<1>(cur_tuple) > get<1>(results_nodes[index_freq]))
+        {
+            break;
+        }
+    }
+
+    // Insert at the good position
+    results_nodes.insert(it + index_freq, cur_tuple);
+}
+
+// Recursive function for search_trie_approx
 void search_trie_approx_rec(Trie *trie, string word, size_t max_dist,
                             vector<tuple<string, size_t>> &results_nodes,
                             string acc, size_t dist)
@@ -61,6 +99,7 @@ void search_trie_approx_rec(Trie *trie, string word, size_t max_dist,
     }
 }
 
+// Function that search words with dist of max_dist on a Trie
 vector<tuple<string, size_t>> search_trie_approx(Trie *trie, string word, size_t max_dist)
 {
     vector<tuple<string, size_t>> results_nodes;
@@ -69,29 +108,44 @@ vector<tuple<string, size_t>> search_trie_approx(Trie *trie, string word, size_t
     return results_nodes;
 }
 
-// Function that compares 2 strings and decomposes its into the common part and the 2 non-common parts
-// ie: (david, dadou) -> (da, vid, dou)
-tuple<string, string, string> common_prefix_decomposition(string word1, string word2)
+// Recursive function for search_ptrie_approx
+void search_ptrie_approx_rec(Patricia_trie *ptrie, string word, size_t max_dist,
+                            vector<tuple<string, size_t, size_t>> &results_nodes,
+                            string acc, size_t dist)
 {
-    string common("");
-    size_t length_word1 = word1.length();
-    size_t length_word2 = word2.length();    
-    size_t min_length = min(length_word1, length_word2);
-    size_t i = 0;
-
-    // Getting the common part
-    while((i < min_length) && (word1[i] == word2[i]))
+    if (word.size() + max_dist < acc.size())
+        return;
+    
+    for (auto child : ptrie->children_get())
     {
-        common[i] = word1[i];
-        i++;
+        if (child->data_get().back() == '$') // leaf
+        {
+            string cur_acc = acc + child->data_get();
+            dist = distance(word, cur_acc);
+
+            if (dist <= max_dist)
+            {
+                auto cur_tuple = make_tuple(cur_acc, child->freq_get(), dist);
+                add_tuple_result(results_nodes, cur_tuple);
+
+                if (max_dist == 1)
+                    return;
+            }
+        }
+
+        // If child have some children, launch the search on them
+        else
+        {
+            search_ptrie_approx_rec(child, word, max_dist, results_nodes, acc + child->data_get(), dist);
+        }
     }
-    common[i] = '\0';
+}
 
-    // Getting the non-common part
-    string rest_word1 = word1.substr(i, length_word1 - i);
-    string rest_word2 = word2.substr(i, length_word2 - i);
+// Function that search words with dist of max_dist on a Trie
+vector<tuple<string, size_t, size_t>> search_ptrie_approx(Patricia_trie *ptrie, string word, size_t max_dist)
+{
+    vector<tuple<string, size_t, size_t>> results_nodes;
+    search_ptrie_approx_rec(ptrie, word + "$", max_dist, results_nodes, "", 0);
 
-    // Creating and return the tuple
-    auto tuple_elements = make_tuple(common.c_str(), rest_word1, rest_word2);
-    return tuple_elements;
+    return results_nodes;
 }

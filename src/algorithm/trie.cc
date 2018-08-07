@@ -57,7 +57,7 @@ ssize_t index_child(vector<Trie *> children, char data)
         }
 
         index++;
-    }  
+    }
     return -1;
 }
 
