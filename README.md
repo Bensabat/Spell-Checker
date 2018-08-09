@@ -1,6 +1,14 @@
 TextMining Project
 ===
 
+# Resume
+
+This project is about a fast and stable command-line tool for spelling correction using a Damerau-Levenshtein distance and a patricia trie data structure. It also uses an optimized searching function that explores the patricia trie in a smart way.
+
+Giving in a first part a dictionnary of words, the program creates the patricia trie associated and serializes it. Then, the user can ask to correct the spelling error of a word, with a maximal error distance. The program returns the most probable words in json format, sorted in order of frequency according to the dictionary initially given.
+
+This program has been developed with C++ programming language.
+
 # Docker (recommanded way)
 
 Generate executables
@@ -38,7 +46,7 @@ Execute the following command:
 $ make distclean
 ```
 
-# Questions
+# Questions (in french)
 
 **1. Decrivez les choix de design de votre programme**
 
@@ -98,3 +106,5 @@ Pour être à l'état de l'art, le correcteur orthographique pourrai prendre en 
 EPITA School, SCIA Master 1 - Project for Text Mining and Natural Language Course. 
 
 Authors: **BENSABAT David** (bensab_d)
+
+Please, note that **I worked alone** on this project which is normally a project in a team of two. Ideed, I didn't find a partner.
