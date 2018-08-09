@@ -1,0 +1,30 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "cmake",
+            "command": "cmake",
+            "type": "shell",
+            "args": [
+                "..", "-DCMAKE_BUILD_TYPE=debug"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}/out"
+            },
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+        },
+        {
+            "label": "build",
+            "command": "make",
+            "type": "shell",
+            "group": "build",
+            "presentation": {
+                "reveal": "always"
+            },
+            "problemMatcher": "$msCompile"
+        }
+    ]
+}

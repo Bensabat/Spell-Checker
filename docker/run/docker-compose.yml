@@ -1,0 +1,12 @@
+version: '2'
+
+services:
+
+    spellchecker:
+        image: spellchecker
+        container_name: spellchecker
+        working_dir: /code
+        volumes:
+            - ../..:/code
+        mem_limit: 512m
+        memswap_limit: 512m

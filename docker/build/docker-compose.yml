@@ -1,0 +1,13 @@
+version: '3'
+
+services:
+
+    spellchecker:
+        build: ../..
+        image: spellchecker
+        container_name: spellchecker-build
+        working_dir: /code
+        command: bash build.sh
+        volumes:
+            - ../..:/code
+            - ./build.sh:/code/build.sh:ro
