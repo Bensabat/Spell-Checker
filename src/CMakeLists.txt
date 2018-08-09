@@ -5,4 +5,3 @@ include_directories (.)
 
 add_subdirectory (algorithm)
 add_subdirectory (entrypoint)
-add_subdirectory (third_party)

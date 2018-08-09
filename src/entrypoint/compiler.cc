@@ -24,13 +24,11 @@ int main(int argc, char** argv)
         ifstream infile(argv[1]);
         if (infile.is_open())
         {
-            cout << "\nOpened" << endl;
-
             string word;
             int freq;
 
             // Creating the root of the trie (or patricia)
-            cout << "\nCreating the patricia trie" << endl;
+            cout << "Creating the patricia trie ..." << endl;
             Patricia_trie *root = new Patricia_trie();        
 
             // Filling the trie with word and freq from file given
@@ -39,14 +37,18 @@ int main(int argc, char** argv)
                 root->add_word(root, word + "$", freq);
             }
 
+            infile.close();
+
             //root->pretty_printer(root);
 
             // Serialize
-            cout << "\nSerializing patricia trie" << endl;     
+            cout << "Serializing patricia trie ..." << endl;     
             string dict_path = argv[2];
             ofstream output_stream(dict_path, ios::binary);
             root->serialize(output_stream);
             output_stream.close();
+
+            cout << "Done !" << endl;
         }
     }
 

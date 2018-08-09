@@ -9,39 +9,68 @@ Giving in a first part a dictionnary of words, the program creates the patricia 
 
 This program has been developed with C++ programming language.
 
-# Docker (recommanded way)
+# Docker
 
-Generate executables
+## Générer une image avec les dépendances
+
+Depuis la racine du projet:
 
 ```bash
-# TODO
+docker-compose -f docker/build/docker-compose.yml build
 ```
 
-# Configure
+## Generer les exécutables
 
-At the root-level:
+Depuis la racine du projet:
+
 ```bash
-$ bash configure
-
-# It should create /out and /bin directories
+docker-compose -f docker/build/docker-compose.yml up
 ```
 
-# Launch (production)
+## Executer les programmes
 
-Execute the following command:
+```
+cd docker/run
+docker-compose run spellchecker bash
+
+# Une fois dans le container, executez les programmes.
+
+# ./TextMiningCompiler resources/words.txt dict.bin
+# echo "approx 0 test" | ./TextMiningApp dict.bin
+```
+
+> Il est possible de suivre la consomation RAM utilisée:
+> De même le service est configuré pour n'utiliser que 512 Mo.
+> Tout dépassement entraine un arrêt de la commande.
+
+> Exécutez **docker stats** pour suivre l'évolution de la consommation.
+
+# Configuration
+
+A la racine du projet:
+
 ```bash
-$ make
+bash configure
 ```
-> Executables will be found under **bin/release**
 
-# Launch (debug)
+# Génération (production)
 
-From Visual Studio Code, execute the default task to generate the debug configuration.
-> Executables will be found under **bin/debug**
+A la racine du projet:
 
-# Clean
+```bash
+cd out && cmake ..
+cd .. && make
+```
 
-Execute the following command:
+# Génération et lancement (debug)
+
+Depuis Visual Studio Code, exécutez la tâche par défaut pour générer la configuration debug.
+Puis lancez l'executable de votre choix.
+
+# Nettoyer
+
+Depuis la racine du projet:
+
 ```bash
 $ make distclean
 ```
