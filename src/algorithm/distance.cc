@@ -125,10 +125,12 @@ void search_ptrie_approx_rec(Patricia_trie *ptrie, string word, size_t max_dist,
 
             if (dist <= max_dist)
             {
+                // remove the '$' at the end of the word
+                cur_acc.pop_back();
                 auto cur_tuple = make_tuple(cur_acc, child->freq_get(), dist);
                 add_tuple_result(results_nodes, cur_tuple);
 
-                if (max_dist == 1)
+                if (max_dist == 0)
                     return;
             }
         }

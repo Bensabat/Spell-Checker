@@ -23,6 +23,9 @@ class Patricia_trie
         void add_child(Patricia_trie *ptrie, string &word, size_t freq);
         void add_word(Patricia_trie *ptrie, string, size_t);
 
+        void serialize(ofstream& stream);
+        static Patricia_trie* deserialize(ifstream& stream);
+
         vector<Patricia_trie *>& children_get();
         size_t freq_get() const;
         string data_get() const;

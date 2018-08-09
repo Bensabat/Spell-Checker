@@ -80,6 +80,7 @@ Plusieurs points peuvent être améliorés afin de booster les performances du p
 - réduire la taille des noeuds du patricia trie, par exemple en remplaçant les std::string par des char*
 - utiliser d'autre structure que la STL peut offrir, afin de réduire au maximum le nombre de bit de padding
 - utiliser une matrice de taille réduite pour la distance de Damereau-Levenshtein, en utilisant seulement 2 vecteurs à chaque fois par exemple
+- lors de la recherche dans l'arbre, explorer en parrallèles plusieurs branches simultanément afin d'avoir un gain de temps
 
 **7.	Que manque-t-il à votre correcteur orthographique pour qu’il soit à l’état de l’art ?**
 

@@ -1,5 +1,55 @@
 #include "patricia_trie.hh"
 
+void Patricia_trie::serialize(ofstream& stream)
+{
+    int data_length = data_.length();
+    int children_size = children_.size();
+
+    // cout << "data_length: " << data_length
+    //     << ", children_size: " << children_size
+    //     << ", data: " << data_
+    //     << ", freq: " << freq_
+    //     << endl;
+
+    stream.write(reinterpret_cast<char*>(&data_length), sizeof(int));
+    stream.write(reinterpret_cast<const char*>(data_.c_str()), data_length);
+    stream.write(reinterpret_cast<char*>(&freq_), sizeof(int));
+    stream.write(reinterpret_cast<char*>(&children_size), sizeof(int));
+
+    for (auto child : children_get())
+        child->serialize(stream);
+}
+
+Patricia_trie* Patricia_trie::deserialize(ifstream& stream)
+{
+    Patricia_trie* root = new Patricia_trie();
+
+    int data_length;
+    int children_size;
+    
+    stream.read(reinterpret_cast<char*>(&data_length), sizeof(int));
+
+    //char *data = new char[data_length + 1];
+    char data[data_length + 1];
+    data[data_length] = '\0';
+
+    stream.read(reinterpret_cast<char*>(&data), data_length);
+    stream.read(reinterpret_cast<char*>(&(root->freq_)), sizeof(int));
+    stream.read(reinterpret_cast<char*>(&children_size), sizeof(int));
+    root->data_ = string(data);
+
+    // cout << "data_length: " << data_length
+    //     << ", children_size: " << children_size
+    //     << ", data: " << root->data_
+    //     << ", freq: " << root->freq_
+    //     << endl;
+
+    for (int i = 0; i < children_size; i++)
+        root->children_.push_back(deserialize(stream));
+
+    return root;
+}
+
 Patricia_trie::Patricia_trie()
 {
     string str = "";
