@@ -10,16 +10,22 @@ using namespace std;
 
 void print_node_vect(vector<tuple<string, size_t, size_t>> results_vect)
 {
-    cout << "[";
-    char commat = '\0';
-    for(auto tuple : results_vect)
-    {
-        cout << commat << "{\"word\":\"" << get<0>(tuple) << "\",\"freq\":" << get<1>(tuple) 
-             << ",\"distance\":" << get<2>(tuple) << "}";
-        commat = ',';
+    if (results_vect.size() == 0)
+        cout << "[]" << endl;
+
+    else
+    {    
+        cout << "[" << "{\"word\":\"" << get<0>(results_vect[0]) << "\",\"freq\":"
+            << get<1>(results_vect[0]) << ",\"distance\":" << get<2>(results_vect[0]) << "}";
+
+        for (size_t i = 1; i < results_vect.size(); i++)
+        {
+            cout << ",{\"word\":\"" << get<0>(results_vect[i]) << "\",\"freq\":"
+                << get<1>(results_vect[i]) << ",\"distance\":" << get<2>(results_vect[i]) << "}";
+        }
+        cout << "]" << endl;
+        //cout << "\nThis vector contained " << results_vect.size() << " words!\n" << endl;
     }
-    cout << "]" << endl;
-    //cout << "\nThis vector contained " << results_vect.size() << " words!\n" << endl;
 }
 
 int main(int argc, char** argv)
@@ -38,13 +44,14 @@ int main(int argc, char** argv)
         auto *deserialized_trie = Patricia_trie::deserialize(input_stream);
         input_stream.close();
 
+        //deserialized_trie->pretty_printer(deserialized_trie);
 
         string pipe_approx, pipe_dist_max, pipe_word;
         cin >> pipe_approx >> pipe_dist_max >> pipe_word;
         int flag = pipe_approx.size();
         int i = 0;
 
-        while (flag != 0 && i < 4)
+        while (flag != 0)
         {
             // Launch the search
             auto results_vect = search_ptrie_approx(deserialized_trie, pipe_word, atoi(pipe_dist_max.c_str()));

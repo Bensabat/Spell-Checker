@@ -36,35 +36,29 @@ size_t distance(string word1, string word2)
 void add_tuple_result(vector<tuple<string, size_t, size_t>> &results_nodes, tuple<string, size_t, size_t> &cur_tuple)
 {
     vector<tuple<string, size_t, size_t>>::iterator it = results_nodes.begin();
-    
-    // Search pos bound for dist
-    size_t index_dist_max = 0;
-    size_t index_dist_min = 0;
-    
-    for(; index_dist_max < results_nodes.size(); index_dist_max++)
+
+    size_t index = 0;
+
+    for(; index < results_nodes.size(); index++)
     {
-        if (get<2>(cur_tuple) < get<2>(results_nodes[index_dist_max]))
+        if (get<2>(cur_tuple) <= get<2>(results_nodes[index]))
         {
-            break;
-        }
-        if (get<2>(cur_tuple) > get<2>(results_nodes[index_dist_max]))
-        {
-            index_dist_min++;
-        }
-    }
-    
-    // Search pos for freq
-    size_t index_freq = index_dist_min;
-    for(; index_freq < index_dist_max; index_freq++)
-    {
-        if (get<1>(cur_tuple) > get<1>(results_nodes[index_freq]))
-        {
-            break;
+            if (get<2>(cur_tuple) < get<2>(results_nodes[index]))
+                break;
+            
+            if (get<1>(cur_tuple) >= get<1>(results_nodes[index]))
+            {
+                if (get<1>(cur_tuple) > get<1>(results_nodes[index]))
+                    break;            
+
+                if (get<0>(cur_tuple) <= get<0>(results_nodes[index]))
+                    break;
+            }
         }
     }
 
     // Insert at the good position
-    results_nodes.insert(it + index_freq, cur_tuple);
+    results_nodes.insert(it + index, cur_tuple);
 }
 
 // Recursive function for search_trie_approx
